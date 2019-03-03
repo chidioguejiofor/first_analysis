@@ -1,13 +1,16 @@
 import pandas as pd
 import numpy as np
+import dotenv
 import os
 
+from .helpers import process_question_six
 
-from .helpers import  process_question_six
+dotenv.load_dotenv()
 
 CSV_FILENAME = os.getenv('CSV_FILENAME', 'raw_survey_data.csv')
 RAW_DATA_DATA_FRAME =pd.read_csv(CSV_FILENAME, dtype=np.object)
 
+TIDY_DATA_EXPORT_FILENAME = os.getenv('TIDY_DATA_EXPORT_FILENAME',  '2018 Tidy Data.xlsx')
 # observations for python files that do not have
 NOT_PYTHON_STR = 'No, I don’t use Python for my current projects'
 

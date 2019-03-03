@@ -1,6 +1,5 @@
 import pandas as pd
 import math
-from .constants import PYTHON_OBSERVATIONS_DF,  RAW_DATA_DATA_FRAME
 
 def reshape_data(start_index, end_index, question_asked, only_python_observation=True, var_name='question', value_name='answer_chosen', fillna_with_str='',
                  dropna=True):
@@ -26,7 +25,7 @@ def reshape_data(start_index, end_index, question_asked, only_python_observation
         A single column dataframe that contains the title question and the answers that the users
         chose as values
     """
-
+    from .constants import PYTHON_OBSERVATIONS_DF, RAW_DATA_DATA_FRAME
     dataframe = PYTHON_OBSERVATIONS_DF.iloc[:, start_index:end_index]
     if not only_python_observation:
         dataframe = RAW_DATA_DATA_FRAME.iloc[:, start_index:end_index]
@@ -62,6 +61,20 @@ def replace_nans_in_question_six(row):
 
 
 def process_question_six():
+    """Processes question six
+
+    The processing of Question 6 does not follow the normal conventions. This function
+    is used to process question six ( 'What do you use Python for the most?').
+
+    All NaN values in this question are filled with the answer in question 4 when
+    only one option was chosen
+
+
+    Returns:
+        (pandas.Dataframe): A dataframe containing tidy question 6 replies data
+    """
+
+
     from .constants import PYTHON_OBSERVATIONS_DF
     question_six = {
         'string': 'What do you use Python for the most?',
@@ -72,10 +85,9 @@ def process_question_six():
 
     question_six_df = PYTHON_OBSERVATIONS_DF.iloc[:, [59]]
     question_four_df = PYTHON_OBSERVATIONS_DF.iloc[:, 27:43]
-    question_six_df = pd.merge(question_four_df, question_six, left_index=True, right_index=True)
+    question_six_df = pd.merge(question_four_df, question_six_df, left_index=True, right_index=True)
 
-    question_six_with_no_nans = question_six.apply(replace_nans_in_question_six, axis=1)
-    question_six_with_no_nans.iloc[:, -1].value_counts(dropna=False)
+    question_six_with_no_nans = question_six_df.apply(replace_nans_in_question_six, axis=1)
 
     return question_six_with_no_nans.iloc[:, [-1]]
 

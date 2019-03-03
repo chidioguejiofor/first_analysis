@@ -1,6 +1,12 @@
-from .constants import DROP_NA , REPLACE_NA, CUSTOM_PROCESSING_FUNC, BOTH_PYTHON_AND_NON_PYTHON_USERS
+import pandas as pd
+from .constants import (
+    DROP_NA, REPLACE_NA,
+    CUSTOM_PROCESSING_FUNC, BOTH_PYTHON_AND_NON_PYTHON_USERS,
+    TIDY_DATA_EXPORT_FILENAME,QUESTIONS_CHARACTERISTICS
+)
 from .helpers import reshape_data
 from .errors import InvalidProcessTechnique
+
 
 def process_single_question(question_dict):
     if question_dict['processing_technique'] == DROP_NA:
@@ -26,9 +32,17 @@ def process_single_question(question_dict):
     else:
         raise InvalidProcessTechnique
 
-def export_clean_file():
-    from .constants import QUESTIONS_CHARACTERISTICS
-    list_of_cleaned_dfs= []
+
+def export_clean_file(output_filename=TIDY_DATA_EXPORT_FILENAME):
+
+
+    if not TIDY_DATA_EXPORT_FILENAME.endswith('xlsx'):
+        output_filename = '{}.xlsx'.format(TIDY_DATA_EXPORT_FILENAME)
+
+    excel_writer = pd.ExcelWriter(output_filename,  engine='xlsxwriter')
+
     for question_dict in QUESTIONS_CHARACTERISTICS:
-        list_of_cleaned_dfs.append(process_single_question(question_dict))
-    return list_of_cleaned_dfs
+        final_dataframe = process_single_question(question_dict)
+        final_dataframe.to_excel(excel_writer, sheet_name='Question {}'.format(question_dict['number']))
+
+    excel_writer.save()
