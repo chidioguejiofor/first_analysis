@@ -1,5 +1,3 @@
-import pandas as pd
-import numpy as np
 import dotenv
 import os
 
@@ -8,18 +6,12 @@ from .helpers import process_question_six
 dotenv.load_dotenv()
 
 CSV_FILENAME = os.getenv('CSV_FILENAME', 'raw_survey_data.csv')
-RAW_DATA_DATA_FRAME =pd.read_csv(CSV_FILENAME, dtype=np.object)
-
 TIDY_DATA_EXPORT_FILENAME = os.getenv('TIDY_DATA_EXPORT_FILENAME',  '2018 Tidy Data.xlsx')
 # observations for python files that do not have
 NOT_PYTHON_STR = 'No, I don’t use Python for my current projects'
 
-# extracting the observations into two dataframes
-NON_PYTHON_OBSERVATIONS_DF = RAW_DATA_DATA_FRAME[RAW_DATA_DATA_FRAME.iloc[:, 1] == NOT_PYTHON_STR]
-PYTHON_OBSERVATIONS_DF = RAW_DATA_DATA_FRAME[RAW_DATA_DATA_FRAME.iloc[:, 1] != NOT_PYTHON_STR]
-
 DROP_NA = 1
-REPLACE_NA =2
+REPLACE_NA = 2
 CUSTOM_PROCESSING_FUNC = 3
 BOTH_PYTHON_AND_NON_PYTHON_USERS = 4
 

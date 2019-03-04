@@ -1,4 +1,5 @@
 .env
 ^output_*.csv$
 .idea
-
+*.xlsx
+.ipynb_checkpoints

@@ -1,5 +1,6 @@
 import pandas as pd
 import math
+from .dataframe_initializer import DataframeInitializer
 
 def reshape_data(start_index, end_index, question_asked, only_python_observation=True, var_name='question', value_name='answer_chosen', fillna_with_str='',
                  dropna=True):
@@ -25,10 +26,10 @@ def reshape_data(start_index, end_index, question_asked, only_python_observation
         A single column dataframe that contains the title question and the answers that the users
         chose as values
     """
-    from .constants import PYTHON_OBSERVATIONS_DF, RAW_DATA_DATA_FRAME
-    dataframe = PYTHON_OBSERVATIONS_DF.iloc[:, start_index:end_index]
+
+    dataframe = DataframeInitializer.python_observations_df.iloc[:, start_index:end_index]
     if not only_python_observation:
-        dataframe = RAW_DATA_DATA_FRAME.iloc[:, start_index:end_index]
+        dataframe = DataframeInitializer.python_observations_df.iloc[:, start_index:end_index]
 
     melted_observations = pd.melt(dataframe, var_name=var_name, value_name=value_name)
 
@@ -74,17 +75,8 @@ def process_question_six():
         (pandas.Dataframe): A dataframe containing tidy question 6 replies data
     """
 
-
-    from .constants import PYTHON_OBSERVATIONS_DF
-    question_six = {
-        'string': 'What do you use Python for the most?',
-        'number': 6,
-        'start_index': 59,
-        'end_index': 60
-    }
-
-    question_six_df = PYTHON_OBSERVATIONS_DF.iloc[:, [59]]
-    question_four_df = PYTHON_OBSERVATIONS_DF.iloc[:, 27:43]
+    question_six_df = DataframeInitializer.python_observations_df.iloc[:, [59]]
+    question_four_df = DataframeInitializer.python_observations_df.iloc[:, 27:43]
     question_six_df = pd.merge(question_four_df, question_six_df, left_index=True, right_index=True)
 
     question_six_with_no_nans = question_six_df.apply(replace_nans_in_question_six, axis=1)
