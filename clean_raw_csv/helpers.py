@@ -54,32 +54,9 @@ def replace_nans_in_question_six(row):
 
     """
     users_most_python_use_case = row[-1]
+
     if isinstance(users_most_python_use_case, float) and math.isnan(users_most_python_use_case):
         primary_use_case = next(item for item in row.values if isinstance(item, str))
         row[-1] = primary_use_case
-
     return row
-
-
-def process_question_six():
-    """Processes question six
-
-    The processing of Question 6 does not follow the normal conventions. This function
-    is used to process question six ( 'What do you use Python for the most?').
-
-    All NaN values in this question are filled with the answer in question 4 when
-    only one option was chosen
-
-
-    Returns:
-        (pandas.Dataframe): A dataframe containing tidy question 6 replies data
-    """
-
-    question_six_df = DataframeInitializer.python_observations_df.iloc[:, [59]]
-    question_four_df = DataframeInitializer.python_observations_df.iloc[:, 27:43]
-    question_six_df = pd.merge(question_four_df, question_six_df, left_index=True, right_index=True)
-
-    question_six_with_no_nans = question_six_df.apply(replace_nans_in_question_six, axis=1)
-
-    return question_six_with_no_nans.iloc[:, [-1]]
 
