@@ -31,3 +31,74 @@ The above would clean up data and export the clean data to `2018 Tidy Data.xlsx`
 
 You can specify the filename that it would export the data to via: `python cli.py tidy-and-export --output_filename [put-your-filename-here]`.
 
+### Configuring cleaning
+
+You can control the way the data would be cleaned by modifying the `export_config.json` file. The following is how you should structure the file:
+
+```
+{
+  "fillna":[
+    {..}
+  ],
+  "custom_func":[
+    {..}
+  ],
+  "raw_dataset":[..]
+}
+```
+
+
+- The `fillna` option takes a list of dictionaries and tells the app questions whose `NaN` values should be
+filled with a particular value. The dictionary keys are:
+    - number: an int that tells the app the question number
+    - replace_str: tells the app the string that should be used to in place of `NaN` values.
+    For example,
+    ```
+    {
+        "fillna":[
+            { 
+                "number":10,
+                "replace_str": "This string would be used to replace NaN values for Question 10"
+            },
+            { 
+                "number":11,
+                "replace_str": "This string would be used to replace NaN values for Question 11"
+            },
+            ...
+        ]
+    }
+
+    ```
+
+- The `custom_func` option takes a list of dictionaries and tells the app to use a custom function to process
+a particular question. The dictionary options are :
+    - number: an int that tells the app the question number
+    - process_func: the function to call once it is done cleaning the data. Note that this function must
+      return a `pandas Dataframe` that contains the cleaned question
+    For example,
+    ```
+    {
+        ...,
+        "custom_func":[
+            { 
+                "number":10,
+                "process_func": "base_module.function_module.question_10_func"
+            },
+            { 
+                "number":11,
+                "process_func": "base_module.function_module.question_11_func",
+                "args":[ "argument1", "argument2"]
+            },
+            ...
+        ]
+    }
+
+    ```
+    The app would:
+     - call  function `question_10_func` in the module `base_module.function_module` when processing
+    `Question 10`.
+     - call function called `question_11_func` in the module `base_module.function_module`, with arguments
+     `argument1` and `argument2`, when processing `Question 11` .
+     
+    NB: As you can see the `args` option is optional
+

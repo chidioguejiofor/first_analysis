@@ -1,0 +1,15 @@
+{
+  "fillna":[
+    {
+        "number": 7,
+        "replace_str": "I do neither data science nor machine learning"
+    }
+  ],
+  "custom_func":[
+    {
+        "number": 6,
+        "process_func": "clean_raw_csv.custom_functions.process_question_six"
+    }
+  ],
+  "raw_dataset":[40,41]
+}

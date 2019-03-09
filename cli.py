@@ -22,7 +22,6 @@ def tidy_and_export(output_filename):
     Returns:
 
     """
-    click.echo('Extracting data from the csv...')
     DataframeInitializer.initialise_dataframes()
     export_clean_file(output_filename=output_filename)
 
