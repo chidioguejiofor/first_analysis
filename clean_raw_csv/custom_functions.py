@@ -24,4 +24,9 @@ def process_question_six():
 
     question_six_with_no_nans = question_six_df.apply(replace_nans_in_question_six, axis=1)
 
-    return question_six_with_no_nans.iloc[:, [-1]]
+    clean_question_six = question_six_with_no_nans.iloc[:, [-1]]
+    clean_question_six = clean_question_six.reset_index()
+    melted = clean_question_six.melt(id_vars='index', var_name='question', value_name='answer_chosen')
+
+    return melted.set_index('index')
+

@@ -29,9 +29,9 @@ def reshape_data(start_index, end_index, question_asked, only_python_observation
 
     dataframe = DataframeInitializer.python_observations_df.iloc[:, start_index:end_index]
     if not only_python_observation:
-        dataframe = DataframeInitializer.python_observations_df.iloc[:, start_index:end_index]
-
-    melted_observations = pd.melt(dataframe, var_name=var_name, value_name=value_name)
+        dataframe = DataframeInitializer.raw_data_df.iloc[:, start_index:end_index]
+    dataframe = dataframe.reset_index()
+    melted_observations = pd.melt(dataframe, id_vars='index',var_name=var_name, value_name=value_name)
 
     if dropna:
         melted_observations = melted_observations.dropna()
@@ -42,8 +42,7 @@ def reshape_data(start_index, end_index, question_asked, only_python_observation
 
     melted_observations[var_name] = melted_observations.apply(lamda_func, axis=1)
 
-    pivoted_data = melted_observations.pivot(columns=var_name, values=value_name)
-    return pivoted_data
+    return melted_observations.set_index('index')
 
 
 def replace_nans_in_question_six(row):

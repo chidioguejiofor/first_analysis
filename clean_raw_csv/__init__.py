@@ -11,8 +11,15 @@ import click
 import importlib
 
 def process_single_question(question_dict,question_str):
-    if question_dict['number'] == 4:
-        print(question_dict)
+    """
+
+    Args:
+        question_dict (dict):  a dictionary containg the question settings
+        question_str (st): string containing the question
+
+    Returns:
+
+    """
 
     if question_dict['processing_technique'] == DROP_NA:
         return reshape_data(
@@ -26,7 +33,6 @@ def process_single_question(question_dict,question_str):
                      question_str,
                      dropna=False, fillna_with_str=question_dict['replace_str'])
     elif question_dict['processing_technique'] == CUSTOM_PROCESSING_FUNC:
-        print(question_dict)
         module_path, function_name = question_dict['process_func'].rsplit('.', 1)
         func_args = question_dict.get('args', [])
         module = importlib.import_module(module_path)
@@ -37,7 +43,8 @@ def process_single_question(question_dict,question_str):
         return reshape_data(
             question_dict['start_index'],
             question_dict['end_index'],
-            question_str
+            question_str,
+            only_python_observation=False
         )
     else:
         raise InvalidProcessTechnique
